@@ -291,7 +291,6 @@ public class AppUserController {
 
         } else {
             userDocument.setUser(user);
-           // System.out.println(userDocument.getUser().getId());
             userDocumentService.saveDocument(userDocument);
             model.addAttribute("ssoId", user.getSsoId());
             model.addAttribute("docId", userDocument.getId());
