@@ -1,8 +1,11 @@
 package com.victor.service.impl;
 
+import com.victor.controller.AppUserController;
 import com.victor.dao.UserDao;
 import com.victor.model.User;
 import com.victor.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,6 +25,8 @@ public class UserServiceImpl implements UserService{
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     public User findById(int id) {
         return dao.findById(id);
@@ -56,6 +61,8 @@ public class UserServiceImpl implements UserService{
             entity.setState(user.getState());
             entity.setUserFiles(user.getUserFiles());
             entity.setUserDocuments(user.getUserDocuments());
+            logger.info("User {} has been edited", user.getSsoId());
+
         }
     }
 

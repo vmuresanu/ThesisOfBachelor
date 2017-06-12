@@ -10,6 +10,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
@@ -33,7 +34,7 @@ public class PdfBuilder extends AbstractView {
 
         System.out.println(model.get("user"));
 
-        String fileName = "JavaHonk_" + doc.getUser().getSsoId() + "_" + doc.getId() + ".pdf";
+        String fileName = "PDF_REPORT_" + doc.getUser().getSsoId() + "_" + doc.getId() + ".pdf";
 
         response.setContentType("application/pdf");
         response.setHeader("Content-disposition", "attachment; filename=" + fileName);
@@ -67,7 +68,7 @@ public class PdfBuilder extends AbstractView {
 
             addTitlePage(document);
 
-            addContent(document, userDocument);
+            createContent(document, userDocument);
 
             document.close();
 
@@ -100,10 +101,12 @@ public class PdfBuilder extends AbstractView {
 
     }
 
-    private static void addContent(Document document, UserDocument userDocument) throws DocumentException {
+    private static void documentText(Document document, UserDocument userDocument) throws DocumentException {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         Font contentFont = new Font(Font.FontFamily.TIMES_ROMAN, 12);
+        DecimalFormat df = new DecimalFormat("00");
 
+        document.add(new Paragraph("Nr: " + userDocument.getId(), contentFont));
         document.add(new Paragraph("Date: " + simpleDateFormat.format(new Date()), contentFont));
         document.add(new Paragraph("FirstName: " + userDocument.getFirstName(), contentFont));
         document.add(new Paragraph("LastName: " + userDocument.getLastName(), contentFont));
@@ -112,10 +115,10 @@ public class PdfBuilder extends AbstractView {
         document.add(new Paragraph("Need Notary: " + userDocument.getNeedNotary(), contentFont));
         document.add(new Paragraph("Deadline: " +
                 userDocument.getDeadline().getDayOfMonth() + "/" +
-                userDocument.getDeadline().getMonthOfYear() + "/" +
+                df.format(userDocument.getDeadline().getMonthOfYear()) + "/" +
                 userDocument.getDeadline().getYear() + " " +
-                userDocument.getDeadline().getHourOfDay() + ":" +
-                userDocument.getDeadline().getMinuteOfHour(), contentFont));
+                df.format(userDocument.getDeadline().getHourOfDay()-3) + ":" +
+                df.format(userDocument.getDeadline().getMinuteOfHour()), contentFont));
         document.add(new Paragraph("Price: " + userDocument.getPrice() + " MDL", contentFont));
 
         Paragraph secrName = new Paragraph("Created by : " + userDocument.getUser().getFirstName()
@@ -134,6 +137,18 @@ public class PdfBuilder extends AbstractView {
         document.add(secrSign);
         document.add(clientName);
         document.add(clientSign);
+    }
+
+    private static void createContent(Document document, UserDocument userDocument) throws DocumentException {
+        Paragraph documentLine = new Paragraph("------------------------------------------------------------------");
+        documentLine.setAlignment(Element.ALIGN_CENTER);
+        documentText(document, userDocument);
+        for (int i = 0; i < 5; i++){
+            document.add(Chunk.NEWLINE);
+        }
+        document.add(documentLine);
+        document.add(Chunk.NEWLINE);
+        documentText(document, userDocument);
     }
 
     private ByteArrayOutputStream convertPDFToByteArrayOutputStream(String fileName) {

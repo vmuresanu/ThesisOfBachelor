@@ -2,7 +2,12 @@ package com.victor.model;
 
 import com.victor.model.enums.UserProfileType;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 
 /**
@@ -16,7 +21,7 @@ public class UserProfile implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name="TYPE", length=15, unique=true, nullable=false)
+    @Column(name="TYPE", length=20, unique=true, nullable=false)
     private String type = UserProfileType.USER.getUserProfileType();
 
     public Integer getId() {

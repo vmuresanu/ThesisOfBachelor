@@ -9,6 +9,8 @@ import com.victor.service.UserDocumentService;
 import com.victor.service.UserProfileService;
 import com.victor.service.UserService;
 import com.victor.view.PdfBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.context.MessageSource;
@@ -64,6 +66,8 @@ public class AppUserController {
 
     @Autowired
     AuthenticationTrustResolver trustResolver;
+
+    static final Logger logger = LoggerFactory.getLogger(AppUserController.class);
 
     /*@InitBinder
     protected void initBinder(WebDataBinder binder) {
@@ -295,24 +299,15 @@ public class AppUserController {
             model.addAttribute("ssoId", user.getSsoId());
             model.addAttribute("docId", userDocument.getId());
             model.addAttribute("successDoc", getPrincipal() +" you have successfully added a new record!");
+            logger.info("User {} has added a new document for {} with a price of {} MDL",
+                    user.getSsoId(),
+                    userDocument.getLastName(),
+                    userDocument.getPrice()
+            );
             return "addeddocsuccess";
         }
         //Logic to save data from userForm
     }
-
-    /*@RequestMapping(value = "/generatePDF-{ssoId}-{docId}", method = RequestMethod.GET)
-    public String createPdf(@PathVariable String ssoId, @PathVariable int docId, Model model) throws Exception{
-        UserDocument document = userDocumentService.findById(docId);
-        User user = userService.findBySSO(ssoId);
-
-        System.out.println(document);
-        System.out.println(user);
-        model.addAttribute("user", user);
-      //  model.addAttribute("document", document);
-
-        return "redirect:/newDoc-"+ssoId+"-"+docId+".pdf";
-
-    }*/
 
     @RequestMapping(value = "/downloadPDF-{ssoId}-{docId}")
     public void downloadPDF(@PathVariable String ssoId, @PathVariable int docId, Model model,
@@ -325,6 +320,7 @@ public class AppUserController {
         PdfBuilder pdfBuilder = new PdfBuilder();
         try {
             pdfBuilder.render((Map<String, ?>) model, request, response);
+            logger.info("User {} has downloaded the document with id = {}", ssoId, docId);
         } catch (Exception e) {
             e.printStackTrace();
         }

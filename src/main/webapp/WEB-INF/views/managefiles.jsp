@@ -29,10 +29,10 @@
                 <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th>No.</th>
-                            <th>File Name</th>
-                            <th>Type</th>
-                            <th>Description</th>
+                            <th width="100">No.</th>
+                            <th width="100">File Name</th>
+                            <th width="100">Type</th>
+                            <th width="100">Description</th>
                             <th width="100"></th>
                             <th width="100"></th>
                         </tr>
@@ -46,7 +46,7 @@
                             <td>${file.description}</td>
                             <td><a href="<c:url value='/file/download-file-${user.id}-${file.id}'/>" class="btn btn-success">
                                 <i class="fa fa-download"></i>&nbsp; Download</a></td>
-                            <td><a href="<c:url value="/file/delete-file-${user.id}-${file.id}"/>" class="btn btn-danger custom-width">
+                            <td><a href="<c:url value="/file/delete-file-${user.id}-${file.id}"/>" class="btn btn-danger">
                                 <i class="fa fa-trash"></i>&nbsp; Delete</a> </td>
                         </tr>
                     </c:forEach>

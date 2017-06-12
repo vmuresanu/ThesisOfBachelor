@@ -42,5 +42,4 @@ public class UserDocumentDaoImpl extends GenericDaoImpl<Integer, UserDocument> i
         UserDocument document = getByKey(id);
         delete(document);
     }
-
 }

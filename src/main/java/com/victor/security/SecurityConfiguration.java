@@ -42,11 +42,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     //#TODO: change the hard coded usertypes to UserProfileTypes (ENUMS)
     //#TODO: USER cannot access /file pages, which is bad.. must correct it
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers("/", "/list")
-                .access("hasRole('USER') or hasRole('ADMIN') or hasRole('DBA')")
+        http.authorizeRequests()
+                .antMatchers("/", "/list").access("hasRole('USER') or hasRole('ADMIN') or hasRole('DBA')")
                 .antMatchers("/newuser/**", "/delete-user-*").access("hasRole('ADMIN')")
                 .antMatchers("/edit-user-*").access("hasRole('ADMIN') or hasRole('DBA')")
-                .antMatchers("/file/**").access("hasRole('ADMIN') or hasRole('DBA')")
+                .antMatchers("/downloadPDF-**", "/newDoc-*").access("hasRole('USER')")
+                .antMatchers("/file/**").access("hasRole('ADMIN') or hasRole('DBA') or hasRole('USER')")
                 .and().formLogin().loginPage("/login").loginProcessingUrl("/login")
                 .usernameParameter("ssoId").passwordParameter("password")
                 .and().rememberMe().rememberMeParameter("remember-me").tokenRepository(tokenRepository)

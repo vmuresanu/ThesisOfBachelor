@@ -1,16 +1,21 @@
 package com.victor.model;
 
 import com.victor.model.enums.DocumentType;
-import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
 
 /**
  * Created by vmuresanu on 5/4/2017.
@@ -124,7 +129,7 @@ public class UserDocument {
     }
 
     public void setStartDate(DateTime startDate) {
-        this.startDate = startDate.plusHours(3);
+        this.startDate = startDate;
     }
 
     public DateTime getDeadline() {

@@ -28,7 +28,6 @@
                 if (typeof disabled !== typeof undefined && disabled !== false) {
                     $select.removeAttr('disabled');
                 }
-
             });
         });
     </script>

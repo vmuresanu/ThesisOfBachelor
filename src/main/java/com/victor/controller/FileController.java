@@ -6,6 +6,8 @@ import com.victor.model.UserFile;
 import com.victor.service.UserFileService;
 import com.victor.service.UserService;
 import com.victor.util.FileValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -40,6 +42,8 @@ public class FileController {
 
     @Autowired
     FileValidator fileValidator;
+
+    static final Logger logger = LoggerFactory.getLogger(FileController.class);
 
     @InitBinder("fileBucket")
     protected void initBinder(WebDataBinder binder) {
@@ -101,6 +105,7 @@ public class FileController {
 
             try {
                 saveDocument(fileBucket, user);
+                logger.info("User {} has uploaded the document to the database", user.getSsoId());
             } catch (IOException e) {
                 e.printStackTrace();
             }
